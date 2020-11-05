@@ -79,8 +79,12 @@
 			<version>1.15.0-rc2</version>
 			<scope>test</scope>
 		</dependency>
-
-
+		<dependency>
+			<groupId>io.r2dbc</groupId>
+			<artifactId>r2dbc-h2</artifactId>
+			<version>0.8.2.RELEASE</version>
+			<scope>runtime</scope>
+		</dependency>
 		<!--		Added Dependencies ends here-->
 	</dependencies>
 

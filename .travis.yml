@@ -9,7 +9,7 @@ jdk: openjdk11
 before_install:
   - chmod a+x ./mvnw
 
-script:
-  - jdk_switcher use openjdk11
-  - export JAVA_HOME=$HOME/openjdk11
-  - $TRAVIS_BUILD_DIR/install-jdk.sh --install openjdk11 --target $JAVA_HOME
+script: ./mvnw clean install
+#  - jdk_switcher use openjdk11
+#  - export JAVA_HOME=$HOME/openjdk11
+#  - $TRAVIS_BUILD_DIR/install-jdk.sh --install openjdk11 --target $JAVA_HOME
