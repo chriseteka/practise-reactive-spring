@@ -5,15 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
-import org.springframework.web.reactive.function.server.RequestPredicate;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
-import static org.springframework.http.MediaType.*;
+import static com.chrisworks.reactive.spring.controllers.URIs.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
-import static com.chrisworks.reactive.spring.controllers.AppController.URIs.*;
 
 @EnableR2dbcRepositories
 @Configuration
@@ -21,14 +20,13 @@ import static com.chrisworks.reactive.spring.controllers.AppController.URIs.*;
 public class AppController {
 
     private final UserHandler userHandler;
-    private final String URI_ROOT = "";
 
     private RouterFunction<ServerResponse> orderRoutes = route()
-            .GET(URI_ROOT, res -> ok().body("Hello order", String.class))
+            .GET(URI_ROOT, res -> ok().body(Mono.just("Hello order"), String.class))
             .build();
 
     private RouterFunction<ServerResponse> paymentRoutes = route()
-            .GET(URI_ROOT, res -> ok().body("Hello Payment", String.class))
+            .GET(URI_ROOT, res -> ok().body(Mono.just("Hello Payment"), String.class))
             .build();
 
     /*
@@ -37,8 +35,7 @@ public class AppController {
      * Many thanks to spring framework 5.
      */
     @Bean
-    RouterFunction<ServerResponse> appEndpoints() {
-        String BASE_URI = "/api/rs";
+    public RouterFunction<ServerResponse> appEndpoints() {
         return route()
                 //"/api/rs"
                 .nest(path(BASE_URI), baseRoute -> baseRoute
@@ -54,16 +51,5 @@ public class AppController {
 
                         .build())
                 .build();
-    }
-
-
-    //This class will hold all the URI used round the app
-    static class URIs {
-
-        static RequestPredicate JSON = accept(APPLICATION_JSON).or(accept(APPLICATION_JSON_UTF8));
-        static String USER_URI = "/user";
-        static String ORDER_URI = "/order";
-        static String PAYMENT_URI = "/payment";
-
     }
 }

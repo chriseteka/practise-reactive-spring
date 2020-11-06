@@ -4,7 +4,9 @@ import com.chrisworks.reactive.spring.Entities.DTOs.RequestResponseObject.BaseRo
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
+import static com.chrisworks.reactive.spring.controllers.URIs.URI_ROOT;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
@@ -14,10 +16,8 @@ public class UserHandler implements BaseRoutes {
 
     @Override
     public RouterFunction<ServerResponse> routes() {
-
-        String URI_ROOT = "";
         return route()
-                .GET(URI_ROOT, res -> ok().body("Hello customer", String.class))
+                .GET(URI_ROOT, res -> ok().body(Mono.just("Hello customer"), String.class))
                 .build();
     }
 }
