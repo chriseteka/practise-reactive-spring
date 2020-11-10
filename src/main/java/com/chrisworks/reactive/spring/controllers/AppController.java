@@ -1,33 +1,25 @@
 package com.chrisworks.reactive.spring.controllers;
 
+import com.chrisworks.reactive.spring.controllers.handlers.OrderHandler;
+import com.chrisworks.reactive.spring.controllers.handlers.PaymentHandler;
 import com.chrisworks.reactive.spring.controllers.handlers.UserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Mono;
 
 import static com.chrisworks.reactive.spring.controllers.URIs.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
-import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-@EnableR2dbcRepositories
 @Configuration
 @RequiredArgsConstructor
 public class AppController {
 
     private final UserHandler userHandler;
-
-    private RouterFunction<ServerResponse> orderRoutes = route()
-            .GET(URI_ROOT, res -> ok().body(Mono.just("Hello order"), String.class))
-            .build();
-
-    private RouterFunction<ServerResponse> paymentRoutes = route()
-            .GET(URI_ROOT, res -> ok().body(Mono.just("Hello Payment"), String.class))
-            .build();
+    private final OrderHandler orderHandler;
+    private final PaymentHandler paymentHandler;
 
     /*
      * This method is a functional way of specifying all the endpoint exposed by this application
@@ -44,10 +36,10 @@ public class AppController {
                         .nest(path(USER_URI), userHandler::routes)
 
                         //All order's URLS are handled here "/api/rs/order"
-                        .nest(path(ORDER_URI), () -> orderRoutes)
+                        .nest(path(ORDER_URI), orderHandler::routes)
 
-                        //All payment's URLs are handled here
-                        .nest(path(PAYMENT_URI), () -> paymentRoutes)
+                        //All payment's URLs are handled here "/api/rs/payment"
+                        .nest(path(PAYMENT_URI), paymentHandler::routes)
 
                         .build())
                 .build();

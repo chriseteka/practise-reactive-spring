@@ -1,12 +1,14 @@
-package com.chrisworks.reactive.spring.Entities;
+package com.chrisworks.reactive.spring.entities;
 
-import com.chrisworks.reactive.spring.Entities.DTOs.RequestResponseObject.OrderData;
+import com.chrisworks.reactive.spring.entities.dtos.RequestResponseObject.OrderData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
+
+import java.util.UUID;
 
 @Data
 @Builder
@@ -24,11 +26,11 @@ public class Order {
 
     public OrderData orderData(){
         return OrderData.builder()
-                .id(this.orderId)
+                .id(this.orderId.toString())
                 .amountPaid(this.payment.getAmount())
                 .quantity(this.quantity)
                 .products(this.products)
-                .customerId(this.customer.getUserId())
+                .customerId(this.customer.getUserId().toString())
                 .build();
     }
 }

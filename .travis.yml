@@ -9,4 +9,13 @@ jdk: openjdk11
 before_install:
   - chmod a+x ./mvnw
 
-script: ./mvnw clean install
+#script: ./mvnw clean install
+
+jobs:
+  include:
+    - stage: test
+      script: ./mvnw clean compile test
+    - stage: package
+      script: ./mvnw clean compile package
+    - stage: build
+      script: ./mvnw clean compile package install -DskipTests
